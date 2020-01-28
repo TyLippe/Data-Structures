@@ -24,15 +24,19 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        #if does not exist we return none
-        if key not in self.storage.keys():
-            return None
-        #find value that goes with the given key
+        #if key is in the storage
+        if key in self.storage.keys():
+            #hold current node while we loop through the dic
+            current_node = self.cache.head
+            #loop 
+            while current_node.key is not key:
+                #check the next node for the key
+                current_node = current_node.next    
+            #when we find the correct key we will move it to the front
+            self.cache.move_to_front(current_node)
+            return current_node.value    
         else:
-            #move the key value pair to the end (tail)
-            self.cache.move_to_end(key)
-            #return the key's value
-            return key.value
+            return None
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -47,9 +51,21 @@ class LRUCache:
     def set(self, key, value):
         #if cache is at limit 
         if len(self.storage) == self.limit: 
-            #remove last entry
+            #remove tail node
             self.cache.remove_from_tail()
-        #overwrite key if it is already in the cache 
+            #add new key value to head
+            self.cache.add_to_head(key, value)
+            #add new key value to dic
+            self.storage[key] = value
+        #elif key is already in dic we update value
         elif key in self.storage.keys():
-            self.storage.value = value
-        #add key value pair to dict, making it most recent (add to end)
+            self.storage[key] = value
+            #start from head to look for our key value pair
+            current_node = self.cache.head
+            #loop through until we find the key in dic
+            while current_node is not key:
+                current_node = current_node.next
+        #if there is room and no identical key we just add to dic
+        else:
+            self.cache.add_to_head(key, value)
+            self.storage[key] = value
