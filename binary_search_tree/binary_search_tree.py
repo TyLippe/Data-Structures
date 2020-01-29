@@ -1,7 +1,6 @@
 import sys
 sys.path.append('../queue_and_stack')
-from dll_queue import Queue
-from dll_stack import Stack
+#from dll_stack import Stack
 
 
 class BinarySearchTree:
@@ -78,10 +77,21 @@ class BinarySearchTree:
             #compare value to current
             #if equal, delete
             if value == self.value:
-                del self.value
-                #replace with .left node
-                self.value = self.left.value
-                return self.value
+                if self.left:
+                    #when found we want to check the left node
+                    left_node = self.left                
+                    #run get max on left_node
+                    max_value = left_node.get_max()
+                    #when we get max_value swap out value for it
+                    self.value = max_value
+                    #recursion time!
+                    left_node.delete(max_value)
+                elif self.right:
+                    right_node = self.right
+                    self.value = right_node.value
+                    right_node.delete(right_node.value)
+                else:
+                    del self
             #if higher, move to right, if no right, return None
             elif value > self.value:
                 return self.right.delete(value)
