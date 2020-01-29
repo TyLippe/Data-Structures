@@ -24,17 +24,13 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        #if key is in the storage
-        if key in self.storage.keys():
-            #hold current node while we loop through the dic
-            current_node = self.cache.head
-            #loop 
-            while current_node.key is not key:
-                #check the next node for the key
-                current_node = current_node.next    
-            #when we find the correct key we will move it to the front
+        #make current_node the given key
+        current_node = self.storage.get(key)
+        #if current_node is found move to front of the dic
+        if current_node:
             self.cache.move_to_front(current_node)
-            return current_node.value    
+            return current_node.value   
+        #if not found then return None 
         else:
             return None
 
@@ -49,23 +45,18 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        #if cache is at limit 
-        if len(self.storage) == self.limit: 
-            #remove tail node
-            self.cache.remove_from_tail()
-            #add new key value to head
-            self.cache.add_to_head(key, value)
-            #add new key value to dic
-            self.storage[key] = value
-        #elif key is already in dic we update value
-        elif key in self.storage.keys():
-            self.storage[key] = value
-            #start from head to look for our key value pair
-            current_node = self.cache.head
-            #loop through until we find the key in dic
-            while current_node is not key:
-                current_node = current_node.next
+        #if key is already in dic we update value
+        if key in self.storage.keys():
+            updated_key = self.storage[key]
+            updated_key.value = value
+            self.cache.move_to_front(updated_key)
         #if there is room and no identical key we just add to dic
         else:
             self.cache.add_to_head(key, value)
-            self.storage[key] = value
+            self.storage[key] = self.cache.head
+        #if cache is at limit update tail to None
+        if len(self.storage) > self.limit: 
+            xpr_key = self.cache.tail.key
+            self.storage[xpr_key] = None
+            #remove tail node
+            self.cache.remove_from_tail()
