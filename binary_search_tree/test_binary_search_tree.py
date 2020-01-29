@@ -12,12 +12,18 @@ class BinarySearchTreeTests(unittest.TestCase):
     def test_insert(self):
         self.bst.insert(2)
         self.bst.insert(3)
-        self.bst.insert(7)
         self.bst.insert(6)
-        self.assertEqual(self.bst.left.right.value, 3)
-        self.assertEqual(self.bst.right.left.value, 6)
-        self.bst.delete(6)
-        self.assertEqual(self.bst.contains(6), False)
+        self.bst.insert(7)
+        self.bst.insert(13)
+        self.bst.insert(11)
+        self.bst.insert(12)
+        self.bst.insert(10)
+        self.bst.insert(14)
+        self.bst.insert(15)
+        # self.assertEqual(self.bst.left.right.value, 3)
+        # self.assertEqual(self.bst.right.left.value, 6)
+        self.bst.delete(12)
+        self.assertEqual(self.bst.contains(12), False)
 
 
     def test_contains(self):

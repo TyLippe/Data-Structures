@@ -74,31 +74,27 @@ class BinarySearchTree:
     # Messing with delete
     def delete(self, value):
         if self.contains(value) is True:
-            #compare value to current
-            #if equal, delete
-            if value == self.value:
-                if self.left:
-                    #when found we want to check the left node
-                    left_node = self.left                
-                    #run get max on left_node
-                    max_value = left_node.get_max()
-                    #when we get max_value swap out value for it
-                    self.value = max_value
-                    #recursion time!
-                    left_node.delete(max_value)
-                elif self.right:
-                    right_node = self.right
-                    self.value = right_node.value
-                    right_node.delete(right_node.value)
-                else:
-                    del self
-            #if higher, move to right, if no right, return None
-            elif value > self.value:
-                return self.right.delete(value)
-            #if lower, move to left, if no left, return None
-            else:
-                return self.left.delete(value)
-        return False
+	        if value == self.value:
+	            if self.left:
+	                left_node = self.left                
+	                max_value = left_node.get_max()
+	                self.value = max_value
+	                left_node.delete(max_value)
+	            elif self.right:
+	                right_node = self.right
+	                self.value = right_node.value
+	                right_node.delete(right_node.value)
+	            else:
+	                return True
+	        elif value > self.value:
+	            delete = self.right.delete(value)
+	            if delete:
+	                self.right = None
+	        else:
+	            delete = self.left.delete(value)
+	            if delete:
+	                self.left = None
+
 
     # DAY 2 Project -----------------------
 
